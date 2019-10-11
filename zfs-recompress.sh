@@ -118,7 +118,7 @@ do
 
 		if [ ! -f "$repl" ]; then
 			echo "'$repl' empty replica could not be created" 1>&2 # some kind of special character in the name of the file?
-			exit 140
+			exit 170
 		fi
 	else
 		cp --preserve=all "$file" "$repl" # preserve all attributes
