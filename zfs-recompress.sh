@@ -12,14 +12,42 @@ clear_line()
 	echo -ne "\\033[2K"; printf "\\r"
 }
 
+get_file_size()
+{
+	# %s total size, in bytes
+	stat -c%s "$1"
+}
+
+get_dir_free()
+{
+	# -f display file system status instead of file status
+	# %a free blocks available to non-superuser
+	# %S fundamental block size (for block counts)	
+	echo $(($(stat -f --format="%a*%S" "$1"))) # arithmetic expansion, free blocks times fundamental block size, e.g., "188363*131072"
+}
+
+get_dir_free_compat001()
+{	
+	# --output[=FIELD_LIST] use the output format defined by FIELD_LIST
+	# -B scale sizes by SIZE before printing them
+	df --output=avail -B 1 "$1" | tail -n 1
+}
+
+format_human_readable()
+{
+	# --to=UNIT auto-scale output numbers to UNITs; see UNIT below
+	# iec accept optional single letter suffix
+	numfmt --to=iec "$1"
+}
+
 usage()
 {
-	echo "usage: $(basename "$0") [[[-f, --folder FOLDER ] [-d, --dry-run]] | [-h, --help]]"
+	echo "usage: $(basename "$0") [[[-f, --folder FOLDER ] [-d, --dry-run]] [--compat001]] | [-h, --help]]"
 }
 
 ##### Main
 
-unset folder dry_run
+unset folder dry_run compat001
 
 while [ "$1" != "" ]; do
 	case $1 in
@@ -27,6 +55,8 @@ while [ "$1" != "" ]; do
 								folder=$1
 								;;
 		-d | --dry-run)			dry_run=1
+								;;
+		--compat001)			compat001=1
 								;;
 		-h | --help)			usage
 								exit
@@ -69,15 +99,22 @@ do
 	fi
 
 	# WARNING: create the replica in the same directory as the source, in order to to avoid free space race conditions (deleted the source, but suddenly can't copy the replica back in)
-
-	file_size=$(stat -c%s "$file")
-
+	
 	file_dir=$(dirname "$file")
-	dir_free=$(($(stat -f --format="%a*%S" "$file_dir"))) # arithmetic expansion, free blocks times fundamental block size, e.g., "188363*131072"
+
+	if [ ! -z "$compat001" ]; then
+		dir_free=$(get_dir_free_compat001 "$file_dir")
+	else
+		dir_free=$(get_dir_free "$file_dir")
+	fi
+
+	#
+	
+	file_size=$(get_file_size "$file")
 
 	if [ "$file_size" -gt "$dir_free" ]; then
-		file_size_fmt=$(numfmt --to=iec "$file_size")
-		dir_free_fmt=$(numfmt --to=iec "$dir_free")
+		file_size_fmt=$(format_human_readable "$file_size")
+		dir_free_fmt=$(format_human_readable "$dir_free")
 
 		echo "'$file' too large to replicate ($file_size_fmt, $dir_free_fmt free)"
 		exit 120
@@ -86,7 +123,7 @@ do
 	#
 
 	if [ $(((i+1) % 10)) -eq 0 ] || [ "$file_size" -gt $((25*1024*1024)) ]; then # show progress on every n-th (performance) or anything larger than x-MB (responsiveness)
-		file_size_fmt=$(numfmt --to=iec "$file_size")
+		file_size_fmt=$(format_human_readable "$file_size")
 	
 		clear_line
 		printf "processing %d of $count_of_files (%d%%): '%s' ($file_size_fmt)" "$((i+1))" "$(((i+1)*100/count_of_files))" "$(basename "$file")"

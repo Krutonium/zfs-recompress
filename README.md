@@ -9,13 +9,16 @@
 ## DESCRIPTION
 Call the *zfs-recompress.sh* script to replicate, verify and overwrite all files in the current working directory and all its descendant directories in order to trigger ZFS compression.
 
-	--folder FOLDER
+	-f, --folder FOLDER
 		process the specified FOLDER instead of the current working directory
 
-	--dry-run
+	-d, --dry-run
 		test every source file for readability/size and try to create an empty file in every destination directory (fast) instead of a full replicate, verify and overwrite cycle (slow)
 
-	--help
+	--compat001
+		compatibility option; use `df` instead of `stat` to determine disk space available
+
+	-h, --help
 		display usage help and exit
 	   
 ## LIMITATIONS
