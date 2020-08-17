@@ -45,7 +45,7 @@ format_human_readable()
 
 usage()
 {
-	echo "usage: $(basename "$0") [[[-f, --folder FOLDER ] [-d, --dry-run]] [--compat001]] | [-h, --help]]"
+	echo "usage: $(basename "$0") [[[-f, --folder FOLDER ] [-d, --dry-run] [--compat001]] | [-h, --help]]"
 }
 
 ##### Main
