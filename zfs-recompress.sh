@@ -14,7 +14,7 @@ clear_line()
 
 usage()
 {
-	echo "usage: $(basename "$0") [[[--folder FOLDER ] [--dry-run]] | [--help]]"
+	echo "usage: $(basename "$0") [[[-f, --folder FOLDER ] [-d, --dry-run]] | [-h, --help]]"
 }
 
 ##### Main
