@@ -18,6 +18,10 @@ Call the *zfs-recompress.sh* script to replicate, verify and overwrite all files
 	--help
 		display usage help and exit
 	   
+## LIMITATIONS
+
+Files that are hard-linked (as well as all their hard links) are skipped. You must process those files manually. In order to [find all files with one or more hard links](http://superuser.com/questions/485919/how-can-i-find-all-hardlinked-files-on-a-filesystem), try: `find . -type f -links +1 -printf '%i %n %p\n'`.
+
 ## REPORTING BUGS
 Please report *zfs-recompress.sh* bugs through [GitHub](https://github.com/gary17/zfs-recompress).
 

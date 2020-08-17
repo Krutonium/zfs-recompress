@@ -1,10 +1,5 @@
 #!/bin/bash
 
-# WARNING: excludes hard-linked and their hard links, must process manually
-#
-# find all files with at least two [hard] links, https://superuser.com/questions/485919/how-can-i-find-all-hardlinked-files-on-a-filesystem
-# find /bin -type f -links +1 -printf '%i %n %p\n'
-
 ##### Constants
 
 #
@@ -46,7 +41,7 @@ if [ -z "$folder" ]; then # intentionally: unset or empty
 	folder="$(pwd)"
 fi
 
-# FYI: regular files only, excludes hard-linked and their hard links, symbolic links, sockets, ...
+# WARNING: processes regular files only, see "LIMITATIONS" in the "README.md" document
 printf "searching..."
 
 unset files i
