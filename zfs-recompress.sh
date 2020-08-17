@@ -9,13 +9,16 @@
 clear_line()
 {
 	# clear the entire line
+
+	# -n do not output the trailing newline
+	# -e enable interpretation of backslash escapes
 	echo -ne "\\033[2K"; printf "\\r"
 }
 
 get_file_size()
 {
 	# %s total size, in bytes
-	stat -c%s "$1"
+	stat --format="%s" "$1"
 }
 
 get_dir_free()
@@ -23,14 +26,14 @@ get_dir_free()
 	# -f display file system status instead of file status
 	# %a free blocks available to non-superuser
 	# %S fundamental block size (for block counts)	
-	echo $(($(stat -f --format="%a*%S" "$1"))) # arithmetic expansion, free blocks times fundamental block size, e.g., "188363*131072"
+	echo $(($(stat --file-system --format="%a*%S" "$1"))) # arithmetic expansion, free blocks times fundamental block size, e.g., "188363*131072"
 }
 
 get_dir_free_compat001()
 {	
 	# --output[=FIELD_LIST] use the output format defined by FIELD_LIST
 	# -B scale sizes by SIZE before printing them
-	df --output=avail -B 1 "$1" | tail -n 1
+	df --output=avail --block-size=1 "$1" | tail --lines=1
 }
 
 format_human_readable()
