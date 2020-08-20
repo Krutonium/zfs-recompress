@@ -19,7 +19,7 @@ Call the *zfs-recompress.sh* script to replicate, verify and overwrite all files
 		test every source file for readability/size and try to create an empty file in every destination directory (fast) instead of a full replicate, verify and overwrite cycle (slow)
 
 	--compat001
-		compatibility option; use `df` instead of `stat` to determine disk space available
+		a compatibility option; use `df` instead of `stat` to determine disk space available
 
 	-h, --help
 		display usage help and exit
