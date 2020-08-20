@@ -28,10 +28,12 @@ Files that are hard-linked (as well as all their hard links) are skipped. You mu
 ## REPORTING BUGS
 Please report *zfs-recompress.sh* bugs through [GitHub](https://github.com/gary17/zfs-recompress).
 
-## COPYRIGHT
-This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law.
+## WARNING
 
 **ALWAYS MAKE A BACKUP BEFORE BATCH-PROCESSING COMPUTER FILES IN ANY WAY.**
+
+## COPYRIGHT
+This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law.
 
 ## SEE ALSO
 Further information is available through comments within the *zfs-recompress.sh* script itself, readable with any text editor.
