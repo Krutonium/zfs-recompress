@@ -18,9 +18,6 @@ Call the *zfs-recompress.sh* script to replicate, verify and overwrite all files
 	-d, --dry-run
 		test every source file for readability/size and try to create an empty file in every destination directory (fast) instead of a full replicate, verify and overwrite cycle (slow)
 
-	--compat001
-		a compatibility option; use `df` instead of `stat` to determine disk space available
-
 	-h, --help
 		display usage help and exit
 
@@ -29,6 +26,12 @@ Examples:
 - running `zfs-recompress.sh` in the `/mnt/files/foo/` directory will process all files in `/mnt/files/foo/`, `/mnt/files/foo/bar/`, `/mnt/files/foo/bar/baz/` and so on, but will not process files in `/mnt/files/`
 
 - running `zfs-recompress.sh --folder /mnt/files/` in the `/mnt/files/foo/` directory will process all files in `/mnt/files/`, `/mnt/files/foo/`, `/mnt/files/foo/bar/`, `/mnt/files/foo/bar/baz/` and so on
+
+## COMPATIBILITY
+
+- Linux (tested under Ubuntu 20.04)
+
+- FreeBSD / FreeNAS (tested under FreeBSD 11.3, needs: `pkg install bash; ln -s /usr/local/bin/bash /bin/bash`)
 
 ## LIMITATIONS
 
