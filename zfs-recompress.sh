@@ -213,7 +213,7 @@ usage()
 		exit 190
 	fi
 
-	$CMD_ECHO "usage: $($CMD_BASENAME "$0") [[[-f, --folder FOLDER ] [-d, --dry-run] ] | [-h, --help]]"
+	echo "usage: $0 [[[-f, --folder FOLDER ] [-d, --dry-run] ] | [-h, --help]]" # catch-22
 }
 
 ##### Main
@@ -242,7 +242,7 @@ done
 #
 # identify
 
-platform=$(uname) # WARNING: /bin/uname (Linux) vs. /usr/bin/uname (FreeBSD)
+platform=$(uname) # WARNING: catch-22, /bin/uname (Linux) vs. /usr/bin/uname (FreeBSD)
 
 #
 # platformize
