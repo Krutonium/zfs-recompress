@@ -11,7 +11,7 @@
 clear_line()
 {
 	if [ $# -ne 0 ]; then
-		$CMD_ECHO "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
+		echo "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
 		exit 190
 	fi
 
@@ -19,13 +19,13 @@ clear_line()
 
 	# -n do not output the trailing newline
 	# -e enable interpretation of backslash escapes
-	$CMD_ECHO -ne "\\033[2K"; $CMD_PRINTF "\\r"
+	echo -ne "\\033[2K"; printf "\\r"
 }
 
 get_file_size()
 {
 	if [ $# -ne 1 ]; then
-		$CMD_ECHO "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
+		echo "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
 		exit 190
 	fi
 
@@ -36,7 +36,7 @@ get_file_size()
 get_file_size_bsd()
 {
 	if [ $# -ne 1 ]; then
-		$CMD_ECHO "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
+		echo "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
 		exit 190
 	fi
 
@@ -47,7 +47,7 @@ get_file_size_bsd()
 get_dir_free()
 {
 	if [ $# -ne 1 ]; then
-		$CMD_ECHO "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
+		echo "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
 		exit 190
 	fi
 
@@ -55,13 +55,13 @@ get_dir_free()
 	# %a free blocks available to non-superuser
 	# %S fundamental block size (for block counts)	
 	local formula=$($CMD_STAT --file-system --format="%a*%S" "$1")
-	$CMD_ECHO $(($formula)) # arithmetic expansion, free blocks times fundamental block size, e.g., "188363*131072"
+	echo $(($formula)) # arithmetic expansion, free blocks times fundamental block size, e.g., "188363*131072"
 }
 
 get_dir_free_compat001() # unused, FYI
 {	
 	if [ $# -ne 1 ]; then
-		$CMD_ECHO "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
+		echo "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
 		exit 190
 	fi
 
@@ -73,20 +73,20 @@ get_dir_free_compat001() # unused, FYI
 get_dir_free_bsd()
 {
 	if [ $# -ne 1 ]; then
-		$CMD_ECHO "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
+		echo "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
 		exit 190
 	fi
 
 	# -b Explicitly use 512-byte blocks
 	# TODO: check sanity, i.e. the "Avail" column ordinal
 	local blocks=$($CMD_DF -b "$1" | $CMD_CUT -w -f 4 | $CMD_TAIL -n 1)
-	$CMD_ECHO $(($blocks*512))
+	echo $(($blocks*512))
 }
 
 format_h()
 {
 	if [ $# -ne 1 ]; then
-		$CMD_ECHO "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
+		echo "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
 		exit 190
 	fi
 
@@ -98,28 +98,28 @@ format_h()
 format_h_bsd()
 {
 	if [ $# -ne 1 ]; then
-		$CMD_ECHO "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
+		echo "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
 		exit 190
 	fi
 
 	if [ "$1" -gt $((1024 * 1024 * 1024)) ]; then
-		local num=$($CMD_ECHO "scale=1; $1 / (1024 * 1024 * 1024)" | $CMD_BC)
-		$CMD_ECHO "${num}G"
+		local num=$(echo "scale=1; $1 / (1024 * 1024 * 1024)" | $CMD_BC)
+		echo "${num}G"
 	elif [ "$1" -gt $((1024 * 1024)) ]; then
-		local num=$($CMD_ECHO "scale=1; $1 / (1024 * 1024)" | $CMD_BC)
-		$CMD_ECHO "${num}M"
+		local num=$(echo "scale=1; $1 / (1024 * 1024)" | $CMD_BC)
+		echo "${num}M"
 	elif [ "$1" -gt 1024 ]; then
-		local num=$($CMD_ECHO "scale=1; $1 / 1024" | $CMD_BC)
-		$CMD_ECHO "${num}K"
+		local num=$(echo "scale=1; $1 / 1024" | $CMD_BC)
+		echo "${num}K"
 	else
-		$CMD_ECHO "${1}"
+		echo "${1}"
 	fi
 }
 
 gen_uuid()
 {
 	if [ $# -ne 0 ]; then
-		$CMD_ECHO "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
+		echo "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
 		exit 190
 	fi
 
@@ -129,7 +129,7 @@ gen_uuid()
 force_rm()
 {
 	if [ $# -ne 1 ]; then
-		$CMD_ECHO "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
+		echo "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
 		exit 190
 	fi
 
@@ -139,7 +139,7 @@ force_rm()
 force_rm_bsd()
 {
 	if [ $# -ne 1 ]; then
-		$CMD_ECHO "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
+		echo "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
 		exit 190
 	fi
 
@@ -149,7 +149,7 @@ force_rm_bsd()
 cp_preserved()
 {
 	if [ $# -ne 2 ]; then
-		$CMD_ECHO "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
+		echo "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
 		exit 190
 	fi
 
@@ -159,7 +159,7 @@ cp_preserved()
 cp_preserved_bsd()
 {
 	if [ $# -ne 2 ]; then
-		$CMD_ECHO "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
+		echo "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
 		exit 190
 	fi
 
@@ -169,7 +169,7 @@ cp_preserved_bsd()
 silent_cmp()
 {
 	if [ $# -ne 2 ]; then
-		$CMD_ECHO "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
+		echo "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
 		exit 190
 	fi
 
@@ -179,7 +179,7 @@ silent_cmp()
 silent_cmp_bsd()
 {
 	if [ $# -ne 2 ]; then
-		$CMD_ECHO "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
+		echo "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
 		exit 190
 	fi
 
@@ -189,7 +189,7 @@ silent_cmp_bsd()
 force_mv()
 {
 	if [ $# -ne 2 ]; then
-		$CMD_ECHO "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
+		echo "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
 		exit 190
 	fi
 
@@ -199,7 +199,7 @@ force_mv()
 force_mv_bsd()
 {
 	if [ $# -ne 2 ]; then
-		$CMD_ECHO "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
+		echo "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
 		exit 190
 	fi
 
@@ -209,11 +209,11 @@ force_mv_bsd()
 usage()
 {
 	if [ $# -ne 0 ]; then
-		$CMD_ECHO "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
+		echo "internal script error at line ${LINENO}, function: '${FUNCNAME}', args: '$@'" 1>&2
 		exit 190
 	fi
 
-	echo "usage: $0 [[[-f, --folder FOLDER ] [-d, --dry-run] ] | [-h, --help]]" # catch-22
+	echo "usage: $0 [[[-f, --folder FOLDER ] [-d, --dry-run] ] | [-h, --help]]"
 }
 
 ##### Main
@@ -254,8 +254,8 @@ declare -A cmd_map # associative
 
 if [ "$platform" = "Linux" ]; then # avoid "eval" function redeclare
 	cmd_map=(
-		[CMD_ECHO]="/bin/echo"
-		[CMD_PRINTF]="/usr/bin/printf"
+		# echo is a shell builtin
+		# printf is a shell builtin
 		[CMD_STAT]="/usr/bin/stat"
 		[CMD_DF]="/bin/df"
 		[CMD_TAIL]="/usr/bin/tail"
@@ -282,8 +282,8 @@ if [ "$platform" = "Linux" ]; then # avoid "eval" function redeclare
 	FN_FORCE_MV=force_mv
 elif [ "$platform" = "FreeBSD" ] || [ "$platform" = "FreeNAS" ]; then
 	cmd_map=(
-		[CMD_ECHO]="/bin/echo"
-		[CMD_PRINTF]="/usr/bin/printf"
+		# echo is a shell builtin
+		# printf is a shell builtin
 		[CMD_STAT]="/usr/bin/stat"		
 		[CMD_DF]="/bin/df"
 		[CMD_TAIL]="/usr/bin/tail"
@@ -310,7 +310,7 @@ elif [ "$platform" = "FreeBSD" ] || [ "$platform" = "FreeNAS" ]; then
 	FN_SILENT_CMP=silent_cmp_bsd
 	FN_FORCE_MV=force_mv_bsd
 else
-	echo "unsupported platform '$platform'" 1>&2 # catch-22
+	echo "unsupported platform '$platform'" 1>&2
 	exit 180
 fi
 
@@ -323,7 +323,7 @@ for key in "${!cmd_map[@]}";
 
 		# verify
 		if [ ! -x "$cmd" ]; then
-			echo "'$cmd' is not executable or does not exist" 1>&2 # catch-22
+			echo "'$cmd' is not executable or does not exist" 1>&2
 			exit 210
 		fi
 
@@ -342,7 +342,7 @@ fi
 # search
 
 # WARNING: processes regular files only, see "LIMITATIONS" in the "README.md" document
-$CMD_PRINTF "searching..."
+printf "searching..."
 
 unset files i
 
@@ -366,7 +366,7 @@ do
 	fi
 
 	if [ ! -r "$file" ]; then
-		$CMD_ECHO "'$file' is not readable" 1>&2 # otherwise, "cp: cannot open '...' for reading: Permission denied"
+		echo "'$file' is not readable" 1>&2 # otherwise, "cp: cannot open '...' for reading: Permission denied"
 		exit 110
 	fi
 
@@ -383,7 +383,7 @@ do
 		file_size_fmt=$($FN_FORMAT_H "$file_size")
 		dir_free_fmt=$($FN_FORMAT_H "$dir_free")
 
-		$CMD_ECHO "'$file' too large to replicate ($file_size_fmt, $dir_free_fmt free)"
+		echo "'$file' too large to replicate ($file_size_fmt, $dir_free_fmt free)"
 		exit 120
 	fi
 
@@ -393,7 +393,7 @@ do
 		file_size_fmt=$($FN_FORMAT_H "$file_size")
 	
 		clear_line
-		$CMD_PRINTF "processing %d of $count_of_files (%d%%): '%s' ($file_size_fmt)" "$((i+1))" "$(((i+1)*100/count_of_files))" "$($CMD_BASENAME "$file")"
+		printf "processing %d of $count_of_files (%d%%): '%s' ($file_size_fmt)" "$((i+1))" "$(((i+1)*100/count_of_files))" "$($CMD_BASENAME "$file")"
 	fi
 
 	# TO-DO: possibly detect whether already compressed (with the same ZFS compression algorithm) and skip
@@ -406,7 +406,7 @@ do
 	{
 		$FN_FORCE_RM "$repl" # might not even exist
 
-		$CMD_ECHO
+		echo
 		exit 200
 	}
 
@@ -416,7 +416,7 @@ do
 		$CMD_TOUCH "$repl"
 
 		if [ ! -f "$repl" ]; then
-			$CMD_ECHO "'$repl' empty replica could not be created" 1>&2 # some kind of special character in the name of the file?
+			echo "'$repl' empty replica could not be created" 1>&2 # some kind of special character in the name of the file?
 			exit 170
 		fi
 	else
@@ -426,12 +426,12 @@ do
 		if [ $rc -ne 0 ]; then
 			$FN_FORCE_RM "$repl" # might not even exist
 
-			$CMD_ECHO "'$file' replica creation failed, could not copy" 1>&2
+			echo "'$file' replica creation failed, could not copy" 1>&2
 			exit 130
 		fi
 
 		if [ ! -f "$repl" ]; then
-			$CMD_ECHO "'$repl' replica could not be created" 1>&2 # some kind of special character in the name of the file?
+			echo "'$repl' replica could not be created" 1>&2 # some kind of special character in the name of the file?
 			exit 140
 		fi
 
@@ -443,7 +443,7 @@ do
 		if [ $rc -ne 0 ]; then
 			$FN_FORCE_RM "$repl" # might not even exist
 
-			$CMD_ECHO "'$file' replica verification failed, different from the original" 1>&2
+			echo "'$file' replica verification failed, different from the original" 1>&2
 			exit 150
 		fi
 	fi
@@ -463,7 +463,7 @@ do
 		$FN_FORCE_MV "$repl" "$file"
 
 		if [ ! -f "$file" ]; then
-			$CMD_ECHO "'$repl' replica could not be renamed back as '$file', MUST RESOLVE MANUALLY" 1>&2
+			echo "'$repl' replica could not be renamed back as '$file', MUST RESOLVE MANUALLY" 1>&2
 			exit 160
 		fi
 
@@ -479,7 +479,7 @@ do
 
 	if [ $((i+1)) -eq $count_of_files ]; then
 		clear_line
-		$CMD_ECHO "processed $((i+1)) files. done."
+		echo "processed $((i+1)) files. done."
 	fi
 
 	#
