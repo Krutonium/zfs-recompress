@@ -77,9 +77,12 @@ get_dir_free_bsd()
 		exit 190
 	fi
 
-	# -b Explicitly use 512-byte blocks
+	# df: -b Explicitly use 512-byte blocks
+	# tr: -dc Delete characters, complement the set of values
+	# cut: -w Use whitespace (spaces and tabs) as the delimiter. Consecutive (...) count as one
+
 	# TODO: check sanity, i.e. the "Avail" column ordinal
-	local blocks=$($CMD_DF -b "$1" | $CMD_CUT -w -f 4 | $CMD_TAIL -n 1)
+	local blocks=$($CMD_DF -b "$1" | $CMD_TAIL -n 1 | $CMD_TR -dc '0-9 ' | $CMD_CUT -w -f 4)
 	echo $(($blocks*512))
 }
 
@@ -288,6 +291,7 @@ elif [ "$platform" = "FreeBSD" ] || [ "$platform" = "FreeNAS" ]; then
 		[CMD_DF]="/bin/df"
 		[CMD_TAIL]="/usr/bin/tail"
 		[CMD_CUT]="/usr/bin/cut"
+		[CMD_TR]="/usr/bin/tr"
 		[CMD_BC]="/usr/bin/bc"
 		[CMD_UUIDGEN]="/bin/uuidgen"
 		[CMD_RM]="/bin/rm"
