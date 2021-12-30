@@ -1,6 +1,4 @@
-#!/bin/bash
-
-# WARNING: /bin/bash (Linux) vs. /usr/local/bin/bash (FreeBSD)
+#!/usr/bin/env bash
 
 ##### Constants
 
